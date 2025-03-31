@@ -4,11 +4,10 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QSp
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QIcon
 
-from src.gui.widgets.input_form import InputForm
-from src.gui.widgets.files_table import FilesTable
-from src.gui.widgets.log_widget import LogWidget
-from src.core.user_generator import UserGeneratorThread
-
+from gui.widgets.input_form import InputForm
+from gui.widgets.files_table import FilesTable
+from gui.widgets.log_widget import LogWidget
+from core.user_generator import UserGeneratorThread
 
 class UserGeneratorApp(QMainWindow):
     def __init__(self):
@@ -53,7 +52,7 @@ class UserGeneratorApp(QMainWindow):
 
         # Add splitter to main layout
         layout.addWidget(main_splitter)
-
+        
         self.log_widget.log("Application started")
 
     def generate_users(self):
@@ -63,28 +62,20 @@ class UserGeneratorApp(QMainWindow):
             prefix = values['prefix']
             contract = values['contract']
 
-            if not num_users:
-                self.log_widget.log("Error: Number of users is required")
+            if not all([num_users, prefix, contract]):
+                self.log_widget.log("Error: All fields must be filled")
                 return
-
-            # Set default values for optional fields
-            prefix = values['prefix'] if values['prefix'].strip() else "_"
-            contract = values['contract'] if values['contract'].strip(
-            ) else "_"
 
             self.input_form.generate_btn.setEnabled(False)
             self.input_form.generate_btn.setText("Generating...")
 
-            self.generator_thread = UserGeneratorThread(
-                num_users, prefix, contract)
+            self.generator_thread = UserGeneratorThread(num_users, prefix, contract)
             self.generator_thread.progress.connect(self.log_widget.log)
             self.generator_thread.finished.connect(self.generation_completed)
             self.generator_thread.start()
 
         except ValueError:
             self.log_widget.log("Error: Invalid number of users")
-            # show message box
-            QMessageBox.warning(self, "Warning", "Invalid number of users")
             self.input_form.generate_btn.setEnabled(True)
             self.input_form.generate_btn.setText("Generate Users")
 
@@ -93,8 +84,7 @@ class UserGeneratorApp(QMainWindow):
         self.input_form.generate_btn.setText("Generate Users")
 
         if success:
-            self.log_widget.log(
-                f"Successfully generated users and saved to '{message}'")
+            self.log_widget.log(f"Successfully generated users and saved to '{message}'")
             self.files_table.update_files()
         else:
             self.log_widget.log(f"Error: {message}")
@@ -107,7 +97,6 @@ class UserGeneratorApp(QMainWindow):
             self.log_widget.log(f"Opening file location: {abs_path}")
             os.system(
                 f'explorer /select,"{abs_path}"' if os.name == 'nt' else f'open -R "{abs_path}"')
-
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
