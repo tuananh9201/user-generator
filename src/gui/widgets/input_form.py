@@ -12,10 +12,10 @@ class InputForm(QWidget):
 
         # Number of users
         self.num_users = self._create_input_field(
-            "Số lượng users:", "Số lượng users")
+            "Số lượng users:", "100")
 
         # Prefix
-        self.prefix = self._create_input_field("Prefix:", "Prefix")
+        self.prefix = self._create_input_field("Prefix:", "vdc")
 
         # Contract
         self.contract = self._create_input_field(
@@ -24,6 +24,19 @@ class InputForm(QWidget):
         # Generate button
         self.generate_btn = QPushButton("Generate Users")
         layout.addWidget(self.generate_btn)
+        # Create help text label
+        help_label = QLabel(
+            "📌 Single-click: Open Excel file  |  Double-click: Open file location")
+        help_label.setStyleSheet("""
+            QLabel {
+                color: #FF0000;
+                padding: 5px;
+                font-weight: bold;
+                background-color: #FFE6E6;
+                border-radius: 3px;
+            }
+        """)
+        layout.addWidget(help_label)
 
     def _create_input_field(self, label: str, placeholder: str) -> QLineEdit:
         container = QWidget()

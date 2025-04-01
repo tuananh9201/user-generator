@@ -1,6 +1,7 @@
-from PyQt5.QtWidgets import QTableWidget, QTableWidgetItem
+from PyQt5.QtWidgets import QTableWidget, QTableWidgetItem, QVBoxLayout, QLabel
 from datetime import datetime
 import os
+
 
 class FilesTable(QTableWidget):
     def __init__(self, parent=None):
@@ -13,9 +14,10 @@ class FilesTable(QTableWidget):
         self.update_files()
 
     def update_files(self):
+
         self.setRowCount(0)
         excel_files = []
-        
+
         for f in os.listdir('.'):
             if f.endswith('.xlsx'):
                 file_info = os.stat(f)
