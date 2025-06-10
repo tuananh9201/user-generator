@@ -56,7 +56,7 @@ class UserGeneratorThread(QThread):
     def _generate_username(self) -> str:
         random_chars = ''.join(random.choices(string.ascii_lowercase, k=4))
         random_digits = ''.join(random.choices(string.digits, k=4))
-        return f"{self.prefix}_{self.fake.first_name()}_{random_chars}_{random_digits}"
+        return f"{self.fake.first_name()}_{random_chars}_{random_digits}"
 
     def _generate_password(self) -> str:
         length = random.randint(8, 20)
